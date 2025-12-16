@@ -1,0 +1,149 @@
+<ion-header translucent="true" class="header">
+  <ion-toolbar>
+    <ion-title>
+      <div class="title-wrap">
+        <div class="title">Buscar</div>
+        <ion-badge class="badge-ai" color="primary">IA</ion-badge>
+      </div>
+      <div class="subtitle">Talleres verificados, servicios y reservas</div>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="openFilters()">
+        <ion-icon name="options-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-toolbar class="searchbar-toolbar">
+    <ion-searchbar
+      placeholder="Buscar taller, servicio o tag…"
+      [(ngModel)]="query"
+      (ionInput)="onSearchInput()"
+      (ionClear)="clearSearch()"
+      debounce="250"
+      animated="true"
+    ></ion-searchbar>
+  </ion-toolbar>
+
+  <div class="chip-row">
+    <ion-chip
+      *ngFor="let cat of categories"
+      [outline]="selectedCategory !== cat"
+      [class.active]="selectedCategory === cat"
+      (click)="selectCategory(cat)"
+    >
+      <ion-label>{{ cat }}</ion-label>
+    </ion-chip>
+  </div>
+</ion-header>
+
+<ion-content fullscreen="true" class="page">
+  <!-- SKELETON -->
+  <ng-container *ngIf="loading; else loaded">
+    <div class="section-title">
+      <ion-skeleton-text animated style="width: 160px; height: 18px"></ion-skeleton-text>
+    </div>
+
+    <div class="cards">
+      <ion-card class="card skeleton" *ngFor="let _ of skeletonItems">
+        <ion-card-content>
+          <div class="row">
+            <ion-skeleton-text animated style="width: 56px; height: 56px; border-radius: 14px"></ion-skeleton-text>
+            <div class="col">
+              <ion-skeleton-text animated style="width: 60%; height: 16px"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 40%; height: 12px; margin-top: 8px"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 80%; height: 12px; margin-top: 12px"></ion-skeleton-text>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </ng-container>
+
+  <!-- CONTENIDO -->
+  <ng-template #loaded>
+    <div class="section-title">
+      <div class="left">
+        <h2>Resultados</h2>
+        <p>{{ filtered.length }} encontrados</p>
+      </div>
+
+      <ion-button size="small" fill="clear" (click)="load()">
+        <ion-icon name="refresh-outline" slot="start"></ion-icon>
+        Recargar
+      </ion-button>
+    </div>
+
+    <!-- EMPTY -->
+    <div class="empty" *ngIf="filtered.length === 0">
+      <div class="empty-icon">
+        <ion-icon name="search-outline"></ion-icon>
+      </div>
+      <h3>No encontramos resultados</h3>
+      <p>Prueba con otro texto o cambia de categoría.</p>
+      <ion-button (click)="clearSearch()" fill="outline">Limpiar búsqueda</ion-button>
+    </div>
+
+    <!-- LISTA -->
+    <div class="cards" *ngIf="filtered.length > 0">
+      <ion-card class="card" *ngFor="let p of filtered; trackBy: trackById">
+        <div class="cover" [style.backgroundImage]="'url(' + p.coverImage + ')'">
+          <div class="cover-overlay"></div>
+
+          <ion-badge class="pill" [color]="p.verified ? 'success' : 'medium'">
+            <ion-icon name="shield-checkmark-outline"></ion-icon>
+            {{ p.verified ? 'Verificado' : 'Sin verificación' }}
+          </ion-badge>
+
+          <div class="score">
+            <ion-icon name="star"></ion-icon>
+            <span>{{ p.rating }}</span>
+            <span class="dot">•</span>
+            <span>{{ p.distanceKm }} km</span>
+          </div>
+        </div>
+
+        <ion-card-content>
+          <div class="top">
+            <h3 (click)="openProvider(p)">{{ p.name }}</h3>
+            <ion-badge class="badge" color="tertiary">{{ p.category }}</ion-badge>
+          </div>
+
+          <div class="meta">
+            <ion-icon name="location-outline"></ion-icon>
+            <span>{{ p.address }}</span>
+          </div>
+
+          <div class="services" *ngIf="p.services?.length">
+            <div class="services-title">Servicios destacados</div>
+            <div class="services-row">
+              <div class="service-chip" *ngFor="let s of p.services.slice(0, 3)">
+                <div class="s-name">{{ s.name }}</div>
+                <div class="s-meta">${{ s.priceFrom }} • {{ s.durationMin }} min</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tags" *ngIf="tagsArray(p).length">
+            <ion-chip class="tag" *ngFor="let t of tagsArray(p).slice(0, 4)">
+              <ion-label>{{ t }}</ion-label>
+            </ion-chip>
+          </div>
+
+          <div class="actions">
+            <ion-button expand="block" (click)="openProvider(p)">
+              Ver detalle
+              <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+            </ion-button>
+
+            <ion-button expand="block" fill="outline" (click)="bookNow(p)">
+              Reservar
+              <ion-icon name="calendar-outline" slot="end"></ion-icon>
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </ng-template>
+</ion-content>

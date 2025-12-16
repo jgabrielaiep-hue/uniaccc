@@ -1,0 +1,31 @@
+<div class="chips" *ngIf="hasFilters">
+
+  <ion-chip *ngIf="brand">
+    <ion-label>Marca: {{ brand }}</ion-label>
+  </ion-chip>
+
+  <ion-chip *ngIf="services.length > 0">
+    <ion-label>{{ services.length }} servicios</ion-label>
+  </ion-chip>
+
+  <ion-chip *ngIf="maxDistanceKm">
+    <ion-label>Hasta {{ maxDistanceKm }} km</ion-label>
+  </ion-chip>
+
+  <ion-chip *ngIf="order">
+    <ion-label>Orden: {{ order }}</ion-label>
+  </ion-chip>
+
+  <ion-button fill="clear" size="small" (click)="open.emit()">
+    Editar
+  </ion-button>
+
+  <ion-button
+    fill="clear"
+    size="small"
+    color="medium"
+    (click)="clear.emit()">
+    Limpiar
+  </ion-button>
+
+</div>

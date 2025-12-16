@@ -1,0 +1,249 @@
+<ion-header translucent="true" class="header">
+  <ion-toolbar>
+    <ion-title>
+      <div class="title">Perfil</div>
+      <div class="subtitle">Tu cuenta y preferencias</div>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="load()">
+        <ion-icon name="refresh-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen="true" class="page">
+  <!-- SKELETON -->
+  <ng-container *ngIf="loading; else content">
+    <div class="hero skeleton-hero">
+      <ion-skeleton-text animated style="width: 100%; height: 180px; border-radius: 18px"></ion-skeleton-text>
+
+      <div class="hero-row">
+        <ion-skeleton-text animated style="width: 70px; height: 70px; border-radius: 18px"></ion-skeleton-text>
+
+        <div class="hero-col">
+          <ion-skeleton-text animated style="width: 55%; height: 14px"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 70%; height: 12px; margin-top: 10px"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 40%; height: 12px; margin-top: 10px"></ion-skeleton-text>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid kpis">
+      <ion-card class="kpi" *ngFor="let _ of [1,2,3]">
+        <ion-card-content>
+          <ion-skeleton-text animated style="width: 60%; height: 12px"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 40%; height: 18px; margin-top: 10px"></ion-skeleton-text>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <div class="section">
+      <ion-card class="panel">
+        <ion-card-content>
+          <ion-skeleton-text animated style="width: 40%; height: 14px"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 90%; height: 12px; margin-top: 12px"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 80%; height: 12px; margin-top: 10px"></ion-skeleton-text>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </ng-container>
+
+  <!-- CONTENT -->
+  <ng-template #content>
+    <!-- HERO -->
+    <div class="hero">
+      <div class="cover" [style.backgroundImage]="'url(' + profile.coverUrl + ')'">
+        <div class="cover-overlay"></div>
+
+        <div class="plan-pill">
+          <ion-badge color="primary" class="pill">Plan {{ profile.plan }}</ion-badge>
+        </div>
+
+        <div class="avatar-row">
+          <div class="avatar" [style.backgroundImage]="'url(' + profile.avatarUrl + ')'"></div>
+
+          <div class="info">
+            <h2>{{ profile.name }}</h2>
+            <p class="line">
+              <ion-icon name="mail-outline"></ion-icon>
+              <span>{{ profile.email }}</span>
+            </p>
+            <p class="line">
+              <ion-icon name="location-outline"></ion-icon>
+              <span>{{ profile.city }}</span>
+            </p>
+            <p class="muted">Miembro desde {{ profile.memberSince }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPIS -->
+    <div class="grid kpis">
+      <ion-card class="kpi">
+        <ion-card-content>
+          <div class="kpi-top">
+            <ion-icon name="calendar-outline"></ion-icon>
+            <span>Reservas</span>
+          </div>
+          <div class="kpi-value">{{ profile.stats.bookings }}</div>
+          <div class="kpi-sub">históricas</div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="kpi">
+        <ion-card-content>
+          <div class="kpi-top">
+            <ion-icon name="cash-outline"></ion-icon>
+            <span>Ahorro</span>
+          </div>
+          <div class="kpi-value">${{ profile.stats.savedCLP }}</div>
+          <div class="kpi-sub">estimado</div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="kpi">
+        <ion-card-content>
+          <div class="kpi-top">
+            <ion-icon name="star-outline"></ion-icon>
+            <span>Rating</span>
+          </div>
+          <div class="kpi-value">{{ profile.stats.avgRating }}</div>
+          <div class="kpi-sub">promedio</div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="section">
+      <div class="section-head">
+        <h3>Acciones rápidas</h3>
+        <p>Atajos para una experiencia real</p>
+      </div>
+
+      <ion-card class="panel">
+        <ion-card-content class="quick">
+          <button class="quick-btn" (click)="openWhatsAppSupport()">
+            <div class="q-icon">
+              <ion-icon name="logo-whatsapp"></ion-icon>
+            </div>
+            <div class="q-text">
+              <div class="q-title">Soporte WhatsApp</div>
+              <div class="q-sub">Respuesta rápida</div>
+            </div>
+            <ion-icon class="chev" name="chevron-forward-outline"></ion-icon>
+          </button>
+
+          <button class="quick-btn" (click)="shareApp()">
+            <div class="q-icon">
+              <ion-icon name="share-social-outline"></ion-icon>
+            </div>
+            <div class="q-text">
+              <div class="q-title">Compartir MotokoApp</div>
+              <div class="q-sub">Copia el link</div>
+            </div>
+            <ion-icon class="chev" name="chevron-forward-outline"></ion-icon>
+          </button>
+
+          <button class="quick-btn" (click)="toast('Sección de ajustes (demo)')">
+            <div class="q-icon">
+              <ion-icon name="settings-outline"></ion-icon>
+            </div>
+            <div class="q-text">
+              <div class="q-title">Ajustes</div>
+              <div class="q-sub">Preferencias generales</div>
+            </div>
+            <ion-icon class="chev" name="chevron-forward-outline"></ion-icon>
+          </button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- PREFERENCES -->
+    <div class="section">
+      <div class="section-head">
+        <h3>Preferencias</h3>
+        <p>Personaliza tu experiencia</p>
+      </div>
+
+      <ion-card class="panel">
+        <ion-card-content class="prefs">
+          <div class="pref-row">
+            <div class="pref-left">
+              <div class="pref-title">Notificaciones</div>
+              <div class="pref-sub">Recordatorios y novedades</div>
+            </div>
+            <ion-toggle
+              [checked]="profile.settings.notifications"
+              (ionChange)="onToggle('notifications', $event.detail.checked)"
+            ></ion-toggle>
+          </div>
+
+          <div class="pref-row">
+            <div class="pref-left">
+              <div class="pref-title">Modo oscuro</div>
+              <div class="pref-sub">Estilo premium (demo)</div>
+            </div>
+            <ion-toggle
+              [checked]="profile.settings.darkMode"
+              (ionChange)="onToggle('darkMode', $event.detail.checked)"
+            ></ion-toggle>
+          </div>
+
+          <div class="pref-row">
+            <div class="pref-left">
+              <div class="pref-title">Recordatorios</div>
+              <div class="pref-sub">Antes de tu reserva</div>
+            </div>
+            <ion-toggle
+              [checked]="profile.settings.reminders"
+              (ionChange)="onToggle('reminders', $event.detail.checked)"
+            ></ion-toggle>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- ACCOUNT -->
+    <div class="section">
+      <div class="section-head">
+        <h3>Cuenta</h3>
+        <p>Información y seguridad (demo)</p>
+      </div>
+
+      <ion-card class="panel">
+        <ion-card-content class="account">
+          <button class="row-btn" (click)="toast('Editar datos (demo)')">
+            <ion-icon name="person-circle-outline"></ion-icon>
+            <span>Editar datos personales</span>
+            <ion-icon class="chev" name="chevron-forward-outline"></ion-icon>
+          </button>
+
+          <button class="row-btn" (click)="toast('Historial de reservas (demo)')">
+            <ion-icon name="time-outline"></ion-icon>
+            <span>Historial completo</span>
+            <ion-icon class="chev" name="chevron-forward-outline"></ion-icon>
+          </button>
+
+          <button class="row-btn" (click)="toast('Privacidad y seguridad (demo)')">
+            <ion-icon name="lock-closed-outline"></ion-icon>
+            <span>Privacidad y seguridad</span>
+            <ion-icon class="chev" name="chevron-forward-outline"></ion-icon>
+          </button>
+
+          <button class="row-btn danger" (click)="toast('Logout mock (sin login)')">
+            <ion-icon name="log-out-outline"></ion-icon>
+            <span>Cerrar sesión (mock)</span>
+            <ion-icon class="chev" name="chevron-forward-outline"></ion-icon>
+          </button>
+        </ion-card-content>
+      </ion-card>
+
+      <div class="footnote">
+        MotokoApp · Proyecto demo para estudiantes · IA + Ionic
+      </div>
+    </div>
+  </ng-template>
+</ion-content>

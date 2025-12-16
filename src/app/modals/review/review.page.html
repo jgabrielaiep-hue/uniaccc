@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Reseña</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h2>{{ booking?.providerName }}</h2>
+  <p>{{ booking?.serviceName }} · {{ booking?.dateISO }} {{ booking?.time }}</p>
+
+  <ion-item>
+    <ion-label>Calificación</ion-label>
+    <ion-range min="1" max="5" step="1" snaps="true" [(ngModel)]="rating">
+      <ion-label slot="end">{{ rating }}</ion-label>
+    </ion-range>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Comentario</ion-label>
+    <ion-textarea rows="5" [(ngModel)]="comment" placeholder="¿Cómo fue el servicio?"></ion-textarea>
+  </ion-item>
+
+  <ion-button expand="block" (click)="submit()" class="btn">
+    Enviar reseña
+  </ion-button>
+</ion-content>

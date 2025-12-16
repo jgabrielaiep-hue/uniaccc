@@ -1,0 +1,7 @@
+{
+  "name": "motokoapp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

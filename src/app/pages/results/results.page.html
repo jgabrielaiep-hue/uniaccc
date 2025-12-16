@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab1"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Resultados</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="clearFilters()">
+        Limpiar filtros
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <!-- Loading -->
+  <ng-container *ngIf="loading">
+    <app-skeleton-list [count]="6"></app-skeleton-list>
+  </ng-container>
+
+  <!-- Results -->
+  <ng-container *ngIf="!loading">
+
+    <ion-list *ngIf="providers.length > 0; else empty">
+      <ion-item *ngFor="let p of providers">
+        <ion-label>
+          <h2>{{ p.name }}</h2>
+          <p>{{ p.distanceKm }} km · ⭐ {{ p.rating }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+    <ng-template #empty>
+      <app-empty-state
+        icon="search-outline"
+        title="Sin resultados"
+        message="No encontramos talleres con los filtros actuales.">
+      </app-empty-state>
+    </ng-template>
+
+  </ng-container>
+
+</ion-content>
